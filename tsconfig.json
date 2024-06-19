@@ -19,10 +19,7 @@
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true
-
-
-    
   },
-  "include": ["src"],
+  "include": ["src", "src/components/Quiz.tsx"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }
