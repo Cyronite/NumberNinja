@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-function Dropdown(props: {options:string[], option:string, setOption: React.Dispatch<React.SetStateAction<string>> }) {
+function Dropdown(props:{playing:boolean, options:string[], option:string, setOption: React.Dispatch<React.SetStateAction<string>> }) {
     // State variables
     const [isOpen, setIsOpen] = useState(false);
     const [selectedLevel, setSelectedLevel] = useState(props.option);
@@ -19,11 +19,11 @@ function Dropdown(props: {options:string[], option:string, setOption: React.Disp
 
     return (
         <div>
-            <button onClick={handleClick} className="text-white font-bree text-xl bg-[#2F72DC] w-[150px] py-2 px-4 rounded-md shadow-xl">
+            {!props.playing && <button onClick={handleClick} className="text-white font-bree text-xl bg-[#2F72DC] w-[170px] py-2 px-4 rounded-md shadow-xl">
                 {selectedLevel}
-            </button>
+            </button>}
             <div className = "">
-                {isOpen && ( <ul className="mt-2 rounded-sm bg-white drop-shadow-2xl absolute w-[150px] z-10">
+                {!props.playing && isOpen && ( <ul className="mt-2 rounded-sm bg-white drop-shadow-2xl absolute w-[150px] z-10">
                     {props.options.map((option) => (
 
                         <li key={option}

@@ -1,10 +1,10 @@
 import { useState, useEffect, Dispatch, SetStateAction } from "react";
-import { throwError } from "rxjs";
 
-function Quiz (props: {attemptsTaken:number, setAttemptsTaken:Dispatch<SetStateAction<number>>, totalAttempts:number, setTotalAttempts:Dispatch<SetStateAction<number>>, correct:number, setCorrect:Dispatch<SetStateAction<number>>, playing:boolean, setPlaying: Dispatch<SetStateAction<boolean>>,clicked:boolean, setClicked:Dispatch<SetStateAction<boolean>>, mode:string, generate:boolean, setGenerate:Dispatch<SetStateAction<boolean>>, setPoints:Dispatch<SetStateAction<number[][]>>}){
+function Quiz (props: {started:boolean, attemptsTaken:number, setAttemptsTaken:Dispatch<SetStateAction<number>>, totalAttempts:number, setTotalAttempts:Dispatch<SetStateAction<number>>, correct:number, setCorrect:Dispatch<SetStateAction<number>>, playing:boolean, setPlaying: Dispatch<SetStateAction<boolean>>,clicked:boolean, setClicked:Dispatch<SetStateAction<boolean>>, mode:string, generate:boolean, setGenerate:Dispatch<SetStateAction<boolean>>, setPoints:Dispatch<SetStateAction<number[][]>>}){
     const [answerOptions, setAnswerOptions] = useState<number[][][]>([]);
     const [correctIndex, setCorrectIndex] = useState(0);
-
+    const [showOptions, setShowOptions] = useState(false)
+    
     // calculates the greatest common divisor
     function gcd(a:number, b:number): number{
         let remainder = a % b;
@@ -124,7 +124,7 @@ function Quiz (props: {attemptsTaken:number, setAttemptsTaken:Dispatch<SetStateA
         for(let i = 0; i < ans.length; i++){
             if(ans[i] == optionOne){
                     setCorrectIndex(i);
-                    console.log(i);
+                    console.log("correct Index is" + i)
             }
         }
         
@@ -132,57 +132,55 @@ function Quiz (props: {attemptsTaken:number, setAttemptsTaken:Dispatch<SetStateA
     }
 
     // generates question and graphs it when ever generate is equl to true
-    useEffect(()=>{
+    useEffect(()=>{  
         if(props.generate == true){
-            if (props.attemptsTaken  < props.totalAttempts){
-                //generate the question
-                let pointOne = generateRandomPoint();
-                let pointTwo = generateRandomPoint();
-                const ratio = generateRatio();
+            //generate the question
+            let pointOne = generateRandomPoint();
+            let pointTwo = generateRandomPoint();
+            const ratio = generateRatio();
 
-                //make it dosnt generate a perfect line
-                while(pointOne[0] === pointTwo[0] || pointOne[1] === pointTwo[1]){
-                    pointTwo = generateRandomPoint();
-                }
-                
-                //generate points and save it
-                setAnswerOptions(generateAnswers(ratio, pointOne, pointTwo));
-                props.setPoints([pointOne, pointTwo])
-
-                props.setGenerate(false)
-            }else{
-                props.setPoints([[ ],[ ]])
+            //make it dosnt generate a perfect line
+            while(pointOne[0] == pointTwo[0] || pointOne[1] == pointTwo[1]){
+                pointTwo = generateRandomPoint();
             }
-        }
+            
+            //generate points and save it
+            setAnswerOptions(generateAnswers(ratio, pointOne, pointTwo));
+            
+                props.setPoints([pointOne, pointTwo])
+            
+            props.setGenerate(false)
+
+
+            
+            
+        }     
     }, [props.generate])
 
     function handleClick(index:number){  
-        if (props.attemptsTaken  < props.totalAttempts){
-            props.setClicked(true);
-            
-                if(index == correctIndex){
-                props.setCorrect(props.correct + 1);
-                }
-            
+        props.setClicked(true);
+      
+        if(index == correctIndex){ setTimeout(()=>{
+            props.setCorrect(props.correct + 1)},1000)
             
         }
     }
-
-    return(
+    return (
         <div className="flex justify-center">
-            <div className="w-[80vw] flex justify-evenly items-center h-[15vh]">
-                <div>Select Choice :</div>
-                {answerOptions.map((option: number[][], index: number) => (
-                    <button
-                        key={index}
-                        onClick={() => handleClick(index)}
-                        className="cursor-pointer hover:underline hover:bg-[#2f71dcaf] px-4 py-2 w-44 text-center rounded-md bg-[#2F72DC] text-white font-bree text-lg"
-                    >
-                        {`(${option[0][0]}${option[0][1] !== 1 ? `/${option[0][1]}` : ''}, ${option[1][0]}${option[1][1] !== 1 ? `/${option[1][1]}` : ''})`}
-                    </button>
-                ))}
-            </div>
+          <div className="w-[599px] flex justify-evenly items-center h-[15vh] flex-wrap">
+            {props.started &&
+              answerOptions.map((option: number[][], index: number) => (
+              <button
+                key={index}
+                onClick={() => handleClick(index)}
+                className="cursor-pointer hover:underline hover:bg-[#2f71dcaf] px-4 py-2 w-[200px] text-center rounded-md bg-[#2F72DC] text-white font-bree text-lg"
+              >
+                {`(${option[0][0]}${
+                  option[0][1] !== 1 ? `/${option[0][1]}` : ""
+                }, ${option[1][0]}${option[1][1] !== 1 ? `/${option[1][1]}` : ""})`}
+              </button>))}
+          </div>
         </div>
-    )
-}
+      );
+    }   
 export default Quiz;
