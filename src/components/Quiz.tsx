@@ -1,6 +1,6 @@
 import { useState, useEffect, Dispatch, SetStateAction } from "react";
 
-function Quiz (props: {started:boolean, attemptsTaken:number, setAttemptsTaken:Dispatch<SetStateAction<number>>, totalAttempts:number, setTotalAttempts:Dispatch<SetStateAction<number>>, correct:number, setCorrect:Dispatch<SetStateAction<number>>, playing:boolean, setPlaying: Dispatch<SetStateAction<boolean>>,clicked:boolean, setClicked:Dispatch<SetStateAction<boolean>>, mode:string, generate:boolean, setGenerate:Dispatch<SetStateAction<boolean>>, setPoints:Dispatch<SetStateAction<number[][]>>}){
+function Quiz (props: {setRatio:Dispatch<SetStateAction<number[]>> ,started:boolean, attemptsTaken:number, setAttemptsTaken:Dispatch<SetStateAction<number>>, totalAttempts:number, setTotalAttempts:Dispatch<SetStateAction<number>>, correct:number, setCorrect:Dispatch<SetStateAction<number>>, playing:boolean, setPlaying: Dispatch<SetStateAction<boolean>>,clicked:boolean, setClicked:Dispatch<SetStateAction<boolean>>, mode:string, generate:boolean, setGenerate:Dispatch<SetStateAction<boolean>>, setPoints:Dispatch<SetStateAction<number[][]>>}){
     const [answerOptions, setAnswerOptions] = useState<number[][][]>([]);
     const [correctIndex, setCorrectIndex] = useState(0);
     const [selectedOption, setIsClicked] = useState(false);
@@ -140,6 +140,7 @@ function Quiz (props: {started:boolean, attemptsTaken:number, setAttemptsTaken:D
             let pointOne = generateRandomPoint();
             let pointTwo = generateRandomPoint();
             const ratio = generateRatio();
+            props.setRatio(ratio);
 
             //make it dosnt generate a perfect line
             while(pointOne[0] == pointTwo[0] || pointOne[1] == pointTwo[1]){
@@ -181,7 +182,7 @@ function Quiz (props: {started:boolean, attemptsTaken:number, setAttemptsTaken:D
             </div>
         </div>
           )}
-          <div className="w-[599px] flex justify-evenly items-center h-[15vh] flex-wrap">
+          <div className="w-[70vw] flex justify-evenly items-center h-[15vh] flex-wrap">
             {props.started &&
               answerOptions.map((option: number[][], index: number) => (
                 <button
@@ -192,7 +193,7 @@ function Quiz (props: {started:boolean, attemptsTaken:number, setAttemptsTaken:D
                     : (index === correctIndex 
                     ? "bg-green-400" 
                     : "bg-red-400")} 
-                    px-4 py-2 w-44 text-center rounded-md bg-[#2F72DC] font-bree text-white`}
+                    px-4 py-2 w-[30vw] text-center rounded-md bg-[#2F72DC] font-bree text-white`}
             >   
                 {`(${option[0][0]}${
                   option[0][1] !== 1 ? `/${option[0][1]}` : ""

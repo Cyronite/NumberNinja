@@ -24,7 +24,7 @@ function RenderGraph(props: {points:number[][]}) {
     return (
         <>
         <div className='flex justify-center items-center'>
-            <div id="graph" className="w-[55vw] h-[80vh] overflow-hidden border-[#2F72DC] border-2 -z-1"></div>
+            <div id="graph" className="w-[70vw] h-[60vh] my-[5vh] overflow-hidden border-[#2F72DC] border-2 -z-1"></div>
         </div>
            
         </>

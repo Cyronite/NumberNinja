@@ -35,7 +35,7 @@ function ModeHandler(props:{ level: string, setPoints: (value: React.SetStateAct
             }, 500);
             setTimeout(() => {
                 setShowPopup(false);
-            }, 2000);
+            }, 1500);
         }
         
 
@@ -69,13 +69,13 @@ function ModeHandler(props:{ level: string, setPoints: (value: React.SetStateAct
         <div>
             <div>  
                 {showPopup && (
-                    <div className="w-full h-full fixed top-0 left-0 flex pb-[100px] justify-center items-end bg-black bg-opacity-50 z-10">
+                    <div className="w-full h-full fixed top-0 left-0 flex justify-center items-center bg-black bg-opacity-50 z-10">
                         <div className={` bg-white p-4 rounded shadow-lg text-lg`} >
                             your score is: {props.correct}/{props.attemptsTaken}
                         </div>
                     </div>)}
             </div>
-            { !props.started && <button onClick={handleClick} className="font-bree text-lg py-2 px-4 rounded-md bg-green-500">Start</button>}
+            { !props.started && <button onClick={handleClick} className="font-bree text-lg py-2 px-4 rounded-md bg-green-500 w-[170px] text-white">Start</button>}
             { props.started && <div className="font-bree text-3xl">score : {props.correct}/{props.attemptsTaken}</div>}
         </div>
     )
