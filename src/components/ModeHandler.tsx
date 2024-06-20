@@ -1,53 +1,80 @@
 import { useState, useEffect } from "react";
-function ModeHandler(props:{ setPoints: (value: React.SetStateAction<number[][]>) => void, started:boolean, setStarted: (value: React.SetStateAction<boolean>) => void , totalAttempts: number, setCorrect: (value: React.SetStateAction<number>) => void, attemptsTaken: number, setAttemptsTaken: (value: React.SetStateAction<number>) => void, clicked: boolean,setClicked: (value: React.SetStateAction<boolean>) => void, setGenerate: (value: React.SetStateAction<boolean>) => void, setPlaying: (value: React.SetStateAction<boolean>) => void, mode: string, correct: number, setTotalAttempts: (value: React.SetStateAction<number>) => void}){
+function ModeHandler(props:{ level: string, setPoints: (value: React.SetStateAction<number[][]>) => void, started:boolean, setStarted: (value: React.SetStateAction<boolean>) => void , totalAttempts: number, setCorrect: (value: React.SetStateAction<number>) => void, attemptsTaken: number, setAttemptsTaken: (value: React.SetStateAction<number>) => void, clicked: boolean,setClicked: (value: React.SetStateAction<boolean>) => void, setGenerate: (value: React.SetStateAction<boolean>) => void, setPlaying: (value: React.SetStateAction<boolean>) => void, mode: string, correct: number, setTotalAttempts: (value: React.SetStateAction<number>) => void}){
     
-  
+    const [showPopup, setShowPopup] = useState(false);
 
     function handleClick(){
-        props.setPlaying(true)
-        props.setGenerate(true)
-        props.setStarted(true)
-        if (props.mode === "10 Questions") {
-            props.setTotalAttempts(10);
-          } else if (props.mode === "5 Questions") {
-            props.setTotalAttempts(1);}
+        if(props.mode != "Set Mode" && props.level != "Set Level"){
+            props.setPlaying(true)
+            props.setGenerate(true)
+            props.setStarted(true)
+            if (props.mode === "1 Question") {
+                props.setTotalAttempts(1);
+            } else if (props.mode === "5 Questions") {
+                props.setTotalAttempts(5);
+            } else if (props.mode === "10 Questions") {
+                props.setTotalAttempts(10);
+            } else if (props.mode === "15 Questions") {
+                props.setTotalAttempts(15);
+            }
+        }
     }
-      function reset(){ 
-        console.warn("reset")
-        props.setStarted(false);
-        props.setPlaying(false)
-        props.setCorrect(0)
-        props.setAttemptsTaken(0)
-        props.setTotalAttempts(0);
-        props.setAttemptsTaken(0); 
-        props.setPoints([[],[]])  
+      function reset(){
+
+        // Set state variables except attemptsTaken, totalAttempts, correct
+        setTimeout(() => {
+            props.setStarted(false);
+            props.setPlaying(false);
+            props.setPoints([[], []]);
+        }, 1000); // Reset after 1 second
+
+        // Show popup for 1 second
+        if(props.attemptsTaken != 0){
+            setTimeout(() => {
+                setShowPopup(true);
+            }, 500);
+            setTimeout(() => {
+                setShowPopup(false);
+            }, 2000);
+        }
+        
+
+
+        // Reset attemptsTaken, totalAttempts, correct after 2 seconds
+        setTimeout(() => {
+            props.setCorrect(0);
+            props.setAttemptsTaken(0);
+            props.setTotalAttempts(0);
+        }, 2000);
     }
     useEffect(() => {
         if (props.clicked){ 
-            setTimeout(()=>{
-                props.setAttemptsTaken((prevAttempts) => prevAttempts + 1);   
-                props.setClicked(false);
-            },1000)
+            props.setAttemptsTaken((prevAttempts) => prevAttempts + 1);   
+            props.setClicked(false);
         }   
-            
-            
-        
     },[props.clicked,])
 
-
-
-    useEffect(()=>{
-        setTimeout(()=>{
+    useEffect(()=>{ 
+        if (props.attemptsTaken == props.totalAttempts) {
             
-           
-            if (props.attemptsTaken == props.totalAttempts) {reset()}else{
-                props.setGenerate(true);
-                
-            }
-        },1000)
+            reset()
+        }
+        else{
+            setTimeout(()=>{props.setGenerate(true)},500)
+            
+        }
     },[ props.attemptsTaken])
+
     return(
         <div>
+            <div>  
+                {showPopup && (
+                    <div className="w-full h-full fixed top-0 left-0 flex pb-[100px] justify-center items-end bg-black bg-opacity-50 z-10">
+                        <div className={` bg-white p-4 rounded shadow-lg text-lg`} >
+                            your score is: {props.correct}/{props.attemptsTaken}
+                        </div>
+                    </div>)}
+            </div>
             { !props.started && <button onClick={handleClick} className="font-bree text-lg py-2 px-4 rounded-md bg-green-500">Start</button>}
             { props.started && <div className="font-bree text-3xl">score : {props.correct}/{props.attemptsTaken}</div>}
         </div>

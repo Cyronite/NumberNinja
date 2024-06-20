@@ -3,8 +3,9 @@ import { useState, useEffect, Dispatch, SetStateAction } from "react";
 function Quiz (props: {started:boolean, attemptsTaken:number, setAttemptsTaken:Dispatch<SetStateAction<number>>, totalAttempts:number, setTotalAttempts:Dispatch<SetStateAction<number>>, correct:number, setCorrect:Dispatch<SetStateAction<number>>, playing:boolean, setPlaying: Dispatch<SetStateAction<boolean>>,clicked:boolean, setClicked:Dispatch<SetStateAction<boolean>>, mode:string, generate:boolean, setGenerate:Dispatch<SetStateAction<boolean>>, setPoints:Dispatch<SetStateAction<number[][]>>}){
     const [answerOptions, setAnswerOptions] = useState<number[][][]>([]);
     const [correctIndex, setCorrectIndex] = useState(0);
-    const [showOptions, setShowOptions] = useState(false)
-    
+    const [selectedOption, setIsClicked] = useState(false);
+    const [showPopup, setShowPopup] = useState(false);
+    const [right, setRight] = useState(false);
     // calculates the greatest common divisor
     function gcd(a:number, b:number): number{
         let remainder = a % b;
@@ -124,7 +125,7 @@ function Quiz (props: {started:boolean, attemptsTaken:number, setAttemptsTaken:D
         for(let i = 0; i < ans.length; i++){
             if(ans[i] == optionOne){
                     setCorrectIndex(i);
-                    console.log("correct Index is" + i)
+                    console.log("correct Index is " + i)
             }
         }
         
@@ -134,6 +135,7 @@ function Quiz (props: {started:boolean, attemptsTaken:number, setAttemptsTaken:D
     // generates question and graphs it when ever generate is equl to true
     useEffect(()=>{  
         if(props.generate == true){
+            
             //generate the question
             let pointOne = generateRandomPoint();
             let pointTwo = generateRandomPoint();
@@ -144,37 +146,54 @@ function Quiz (props: {started:boolean, attemptsTaken:number, setAttemptsTaken:D
                 pointTwo = generateRandomPoint();
             }
             
-            //generate points and save it
-            setAnswerOptions(generateAnswers(ratio, pointOne, pointTwo));
             
-                props.setPoints([pointOne, pointTwo])
+           setAnswerOptions(generateAnswers(ratio, pointOne, pointTwo))
+            
+            props.setPoints([pointOne, pointTwo])
             
             props.setGenerate(false)
 
 
-            
+            setIsClicked(false)
             
         }     
-    }, [props.generate])
+    }, [props.generate, props.clicked])
 
     function handleClick(index:number){  
         props.setClicked(true);
-      
-        if(index == correctIndex){ setTimeout(()=>{
-            props.setCorrect(props.correct + 1)},1000)
-            
+        setIsClicked(true)
+        setShowPopup(true);
+        setTimeout(() => setShowPopup(false), 500); 
+        if(index == correctIndex){ 
+            props.setCorrect(props.correct + 1)
+            setRight(true)
+            setTimeout(() => {
+                setRight(false);
+              }, 500);
         }
     }
     return (
         <div className="flex justify-center">
+            {showPopup && (
+            <div className="w-full h-full fixed top-0 left-0 flex justify-center items-center bg-black bg-opacity-50 z-10">
+                <div className={`${right ? "text-green-500" : "text-red-500"} bg-white p-4 rounded shadow-lg text-lg`} >
+                    { right ? "Correct!" : "Incorrect =("}
+            </div>
+        </div>
+          )}
           <div className="w-[599px] flex justify-evenly items-center h-[15vh] flex-wrap">
             {props.started &&
               answerOptions.map((option: number[][], index: number) => (
-              <button
+                <button
                 key={index}
-                onClick={() => handleClick(index)}
-                className="cursor-pointer hover:underline hover:bg-[#2f71dcaf] px-4 py-2 w-[200px] text-center rounded-md bg-[#2F72DC] text-white font-bree text-lg"
-              >
+                onClick={() => (handleClick( index))}
+                className={`${selectedOption === false 
+                    ? "cursor-pointer hover:underline hover:bg-[#6395E5]" 
+                    : (index === correctIndex 
+                    ? "bg-green-400" 
+                    : "bg-red-400")} 
+                    px-4 py-2 w-44 text-center rounded-md bg-[#2F72DC] font-bree text-white`}
+            >   
                 {`(${option[0][0]}${
                   option[0][1] !== 1 ? `/${option[0][1]}` : ""
                 }, ${option[1][0]}${option[1][1] !== 1 ? `/${option[1][1]}` : ""})`}
