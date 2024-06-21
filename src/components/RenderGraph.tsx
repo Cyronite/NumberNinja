@@ -42,7 +42,7 @@ function RenderGraph(props: { points: number[][] }) {
 
     return (
         <div className=''>
-            <div id="graph" className="w-[45vw] h-[100vh]  rounded-lg"></div>
+            <div id="graph" className="w-[55vw] h-[100vh]  rounded-lg"></div>
         </div>
     );
 }

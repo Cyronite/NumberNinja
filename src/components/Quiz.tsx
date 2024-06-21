@@ -139,13 +139,17 @@ function Quiz (props: {setRatio:Dispatch<SetStateAction<number[]>> ,started:bool
             //generate the question
             let pointOne = generateRandomPoint();
             let pointTwo = generateRandomPoint();
-            const ratio = generateRatio();
+            let ratio = generateRatio();
+            while (ratio[0]==ratio[1]){
+                ratio = generateRatio();
+            }
             props.setRatio(ratio);
 
             //make it dosnt generate a perfect line
             while(pointOne[0] == pointTwo[0] || pointOne[1] == pointTwo[1]){
                 pointTwo = generateRandomPoint();
             }
+            
             
             
            setAnswerOptions(generateAnswers(ratio, pointOne, pointTwo))
@@ -158,7 +162,7 @@ function Quiz (props: {setRatio:Dispatch<SetStateAction<number[]>> ,started:bool
             setIsClicked(false)
             
         }     
-    }, [props.generate, props.clicked])
+    }, [props.generate])
 
     function handleClick(index:number){  
         props.setClicked(true);
@@ -170,14 +174,14 @@ function Quiz (props: {setRatio:Dispatch<SetStateAction<number[]>> ,started:bool
             setRight(true)
             setTimeout(() => {
                 setRight(false);
-              }, 500);
+              }, 1000);
         }
     }
     return (
         <div className="flex justify-center">
             {showPopup && (
-            <div className="w-full h-full fixed top-0 left-0 flex justify-center items-center bg-black bg-opacity-50 z-10">
-                <div className={`${right ? "text-green-500" : "text-red-500"} bg-white p-4 rounded shadow-lg text-lg`} >
+            <div className="w-full h-full fixed top-0 left-0 flex items-center bg-black bg-opacity-50 z-10">
+                <div className={`${right ? "text-green-500" : "text-red-500"} ml-[20vw] bg-white p-10 rounded shadow-lg text-2xl`} >
                     { right ? "Correct!" : "Incorrect =("}
             </div>
         </div>
@@ -193,7 +197,7 @@ function Quiz (props: {setRatio:Dispatch<SetStateAction<number[]>> ,started:bool
                     : (index === correctIndex 
                     ? "bg-green-400" 
                     : "bg-red-400")} 
-                    px-4 py-2 text-center rounded-md bg-[#2F72DC] font-bree text-white`}
+                    px-4 py-2 text-center rounded-md bg-[#2F72DC] font-bree text-white text-2xl`}
             >   
                 {`(${option[0][0]}${
                   option[0][1] !== 1 ? `/${option[0][1]}` : ""

@@ -19,7 +19,7 @@ function Dropdown(props:{playing:boolean, options:string[], option:string, setOp
 
     return (
         <div>
-            {!props.playing && <button onClick={handleClick} className="text-white font-bree text-xl bg-[#2F72DC] w-[170px] py-2 px-4 rounded-md shadow-xl">
+            {!props.playing && <button onClick={handleClick} className="text-white font-bree text-2xl bg-[#2F72DC] w-[170px] py-2 px-4 rounded-md shadow-xl">
                 {selectedLevel}
             </button>}
             <div className = "">
