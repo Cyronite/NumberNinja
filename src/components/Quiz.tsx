@@ -20,41 +20,14 @@ function Quiz (props: {setRatio:Dispatch<SetStateAction<number[]>> ,started:bool
     }
 
     // simplifys a fraction
-    function simplifyFraction(numerator: number, denominator: number): [number, number] {
-        // Calculate the greatest common divisor
-        const commonDivisor = gcd(Math.abs(numerator), Math.abs(denominator));
-
-        // Handle case where both numerator and denominator are negative
-        const sign = (numerator < 0 && denominator < 0) ? -1 : 1;
-            
-        // Simplify the fraction
-        const simplifiedNumerator = numerator / commonDivisor * sign;
-        const simplifiedDenominator = denominator / commonDivisor;
-
-        // If the denominator becomes 1 after simplification, remove it
-        if (simplifiedDenominator === 1) {
-            return [simplifiedNumerator, 1];
-        } else {
-            return [simplifiedNumerator, simplifiedDenominator];
-        }
-}
-
-function simplifyFractionToString(numerator: number, denominator: number): string {
-    // Calculate the greatest common divisor
-    const commonDivisor = gcd(numerator,denominator);
-
-    // Simplify the fraction
-    const simplifiedNumerator = numerator / commonDivisor;
-    const simplifiedDenominator = denominator / commonDivisor;
-
-    // If the denominator is 1, return just the numerator as a string
-    if (simplifiedDenominator === 1) {
-        return `${simplifiedNumerator}`;
-    } else {
-        return `${simplifiedNumerator}/${simplifiedDenominator}`;
+    function simplifyFraction(numerator:number, denominator:number): [number,number] {
+        const commonDivisor = gcd(numerator, denominator);
+        if(commonDivisor == 1){
+            return [numerator, denominator];
+        } else{
+            return [(numerator/ commonDivisor), (denominator / commonDivisor)];
+        }   
     }
-}
-
 
     //generates a random point based on difficulty
     function generateRandomPoint(){
@@ -145,9 +118,9 @@ function simplifyFractionToString(numerator: number, denominator: number): strin
 
         //come up with multiple choice answers
         let optionOne = [[xNumerator , xDenominator],[yNumerator , yDenominator]];
-        let optionTwo = [[ yDenominator ,xNumerator,],[xDenominator , yNumerator]];
+        let optionTwo = [[yDenominator ,xNumerator,],[xDenominator , yNumerator]];
         let optionThree = [[yNumerator , yDenominator],[xNumerator , xDenominator]];
-        let optionFour = [[xDenominator  , yNumerator],[ yDenominator , xNumerator]];
+        let optionFour = [[xDenominator  , yNumerator],[yDenominator , xNumerator]];
         // assighn options to an array 
         let ans = [optionOne, optionTwo, optionThree, optionFour];
         
@@ -173,7 +146,7 @@ function simplifyFractionToString(numerator: number, denominator: number): strin
             let pointOne = generateRandomPoint();
             let pointTwo = generateRandomPoint();
             let ratio = generateRatio();
-            while (ratio[0]==ratio[1]){
+            while (ratio[0]==ratio[1] || ratio[1] < ratio[0]){
                 ratio = generateRatio();
             }
             props.setRatio(ratio);
@@ -229,14 +202,16 @@ function simplifyFractionToString(numerator: number, denominator: number): strin
               answerOptions.map((option: number[][], index: number) => (
                 <button
                 key={index}
-                onClick={() => (handleClick( index))}
+                    onClick={() => {option = [simplifyFraction(option[0][0],option[0][1]),simplifyFraction(option[1][0],option[1][1])], handleClick(index)}}
                 className={`${selectedOption === false 
                     ? "cursor-pointer hover:underline hover:bg-[#6395E5]" 
                     : (index === correctIndex 
                     ? "bg-green-400" 
                     : "bg-red-400")} 
                     px-4 py-2 text-center rounded-md bg-[#2F72DC] font-bree text-white text-2xl`}>   
-                 {`(${simplifyFractionToString(option[0][0], option[0][1])} , ${simplifyFractionToString(option[1][0], option[1][1])})`}
+                {`(${option[0][0]}${
+                  option[0][1] !== 1 ? `/${option[0][1]}` : ""
+                }, ${option[1][0]}${option[1][1] !== 1 ? `/${option[1][1]}` : ""})`}
               </button>))}
           </div>
         </div>
