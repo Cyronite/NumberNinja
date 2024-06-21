@@ -1,6 +1,10 @@
 import { useState, useEffect, Dispatch, SetStateAction } from "react";
 
-function Quiz (props: {setRatio:Dispatch<SetStateAction<number[]>> ,started:boolean, attemptsTaken:number, setAttemptsTaken:Dispatch<SetStateAction<number>>, totalAttempts:number, setTotalAttempts:Dispatch<SetStateAction<number>>, correct:number, setCorrect:Dispatch<SetStateAction<number>>, playing:boolean, setPlaying: Dispatch<SetStateAction<boolean>>,clicked:boolean, setClicked:Dispatch<SetStateAction<boolean>>, mode:string, generate:boolean, setGenerate:Dispatch<SetStateAction<boolean>>, setPoints:Dispatch<SetStateAction<number[][]>>}){
+function Quiz (props: {setRatio:Dispatch<SetStateAction<number[]>> ,started:boolean, attemptsTaken:number, 
+    setAttemptsTaken:Dispatch<SetStateAction<number>>, totalAttempts:number, 
+    setTotalAttempts:Dispatch<SetStateAction<number>>, correct:number, setCorrect:Dispatch<SetStateAction<number>>, 
+    playing:boolean, setPlaying: Dispatch<SetStateAction<boolean>>,clicked:boolean, setClicked:Dispatch<SetStateAction<boolean>>, 
+    mode:string, generate:boolean, setGenerate:Dispatch<SetStateAction<boolean>>, setPoints:Dispatch<SetStateAction<number[][]>>}){
     //state variable
     const [answerOptions, setAnswerOptions] = useState<number[][][]>([]);//array with the possible answers 
     const [correctIndex, setCorrectIndex] = useState(0);// stores the right index which has the right answer
@@ -16,14 +20,44 @@ function Quiz (props: {setRatio:Dispatch<SetStateAction<number[]>> ,started:bool
     }
 
     // simplifys a fraction
-    function simplifyFraction(numerator:number, denominator:number): [number,number] {
-        const commonDivisor = gcd(numerator, denominator);
-        if(commonDivisor == 1){
-            return [numerator, denominator];
-        } else{
-            return [(numerator/ commonDivisor), (denominator / commonDivisor)];
-        }   
+    function simplifyFraction(numerator: number, denominator: number): [number, number] {
+        // Calculate the greatest common divisor
+        const commonDivisor = gcd(Math.abs(numerator), Math.abs(denominator));
+
+        // Handle case where both numerator and denominator are negative
+        const sign = (numerator < 0 && denominator < 0) ? -1 : 1;
+            
+        // Simplify the fraction
+        const simplifiedNumerator = numerator / commonDivisor * sign;
+        const simplifiedDenominator = denominator / commonDivisor;
+
+        // If the denominator becomes 1 after simplification, remove it
+        if (simplifiedDenominator === 1) {
+            return [simplifiedNumerator, 1];
+        } else {
+            return [simplifiedNumerator, simplifiedDenominator];
+        }
+}
+
+function simplifyFractionToString(numerator: number, denominator: number): string {
+    // Calculate the greatest common divisor
+    const commonDivisor = gcd(numerator,denominator);
+
+    // Simplify the fraction
+    const simplifiedNumerator = numerator / commonDivisor;
+    const simplifiedDenominator = denominator / commonDivisor;
+
+    // If the denominator is 1, return just the numerator as a string
+    if (simplifiedDenominator === 1) {
+        return `${simplifiedNumerator}`;
+    } else {
+        if(simplifiedDenominator == 0){
+            prompt("now")
+        }
+        return `${simplifiedNumerator}/${simplifiedDenominator}`;
     }
+}
+
 
     //generates a random point based on difficulty
     function generateRandomPoint(){
@@ -114,9 +148,9 @@ function Quiz (props: {setRatio:Dispatch<SetStateAction<number[]>> ,started:bool
 
         //come up with multiple choice answers
         let optionOne = [[xNumerator , xDenominator],[yNumerator , yDenominator]];
-        let optionTwo = [[yNumerator ,xDenominator,],[xNumerator , yDenominator]];
+        let optionTwo = [[ yDenominator ,xNumerator,],[xDenominator , yNumerator]];
         let optionThree = [[yNumerator , yDenominator],[xNumerator , xDenominator]];
-        let optionFour = [[xNumerator  , yDenominator],[yNumerator , xDenominator]];
+        let optionFour = [[xDenominator  , yNumerator],[ yDenominator , xNumerator]];
         // assighn options to an array 
         let ans = [optionOne, optionTwo, optionThree, optionFour];
         
@@ -205,9 +239,7 @@ function Quiz (props: {setRatio:Dispatch<SetStateAction<number[]>> ,started:bool
                     ? "bg-green-400" 
                     : "bg-red-400")} 
                     px-4 py-2 text-center rounded-md bg-[#2F72DC] font-bree text-white text-2xl`}>   
-                {`(${option[0][0]}${
-                  option[0][1] !== 1 ? `/${option[0][1]}` : ""
-                }, ${option[1][0]}${option[1][1] !== 1 ? `/${option[1][1]}` : ""})`}
+                 {`(${simplifyFractionToString(option[0][0], option[0][1])} , ${simplifyFractionToString(option[1][0], option[1][1])})`}
               </button>))}
           </div>
         </div>

@@ -1,5 +1,9 @@
 import { useState, useEffect } from "react";
-function ModeHandler(props:{ level: string, setPoints: (value: React.SetStateAction<number[][]>) => void, started:boolean, setStarted: (value: React.SetStateAction<boolean>) => void , totalAttempts: number, setCorrect: (value: React.SetStateAction<number>) => void, attemptsTaken: number, setAttemptsTaken: (value: React.SetStateAction<number>) => void, clicked: boolean,setClicked: (value: React.SetStateAction<boolean>) => void, setGenerate: (value: React.SetStateAction<boolean>) => void, setPlaying: (value: React.SetStateAction<boolean>) => void, mode: string, correct: number, setTotalAttempts: (value: React.SetStateAction<number>) => void}){
+function ModeHandler(props:{ level: string, setPoints: (value: React.SetStateAction<number[][]>) => void, started:boolean, 
+    setStarted: (value: React.SetStateAction<boolean>) => void , totalAttempts: number, setCorrect: (value: React.SetStateAction<number>) => void, 
+    attemptsTaken: number, setAttemptsTaken: (value: React.SetStateAction<number>) => void, clicked: boolean,setClicked: (value: React.SetStateAction<boolean>) => void, 
+    setGenerate: (value: React.SetStateAction<boolean>) => void, setPlaying: (value: React.SetStateAction<boolean>) => void, mode: string, correct: number, 
+    setTotalAttempts: (value: React.SetStateAction<number>) => void}){
     // state variables
     const [showPopup, setShowPopup] = useState(false); //status of the popup
 
