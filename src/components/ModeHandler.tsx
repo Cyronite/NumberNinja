@@ -1,9 +1,11 @@
 import { useState, useEffect } from "react";
 function ModeHandler(props:{ level: string, setPoints: (value: React.SetStateAction<number[][]>) => void, started:boolean, setStarted: (value: React.SetStateAction<boolean>) => void , totalAttempts: number, setCorrect: (value: React.SetStateAction<number>) => void, attemptsTaken: number, setAttemptsTaken: (value: React.SetStateAction<number>) => void, clicked: boolean,setClicked: (value: React.SetStateAction<boolean>) => void, setGenerate: (value: React.SetStateAction<boolean>) => void, setPlaying: (value: React.SetStateAction<boolean>) => void, mode: string, correct: number, setTotalAttempts: (value: React.SetStateAction<number>) => void}){
-    
-    const [showPopup, setShowPopup] = useState(false);
+    // state variables
+    const [showPopup, setShowPopup] = useState(false); //status of the popup
 
+     // handles what to do when start is clicked
     function handleClick(){
+         // if not default values it gets the program prepared and set up how many attempts you have
         if(props.mode != "Set Mode" && props.level != "Set Level"){
             props.setPlaying(true)
             props.setStarted(true)
@@ -19,28 +21,28 @@ function ModeHandler(props:{ level: string, setPoints: (value: React.SetStateAct
             }
         }
     }
-      function reset(){
+    // once you run our of choices you reset so you cna do it again
+    function reset(){
+    setTimeout(() => {
+        props.setStarted(false);
+        props.setPlaying(false);
+        props.setPoints([[], []]);
+    }, 1); 
 
-        // Set state variables except attemptsTaken, totalAttempts, correct
+    // Show popup for 1 second
+    if(props.attemptsTaken != 0){
         setTimeout(() => {
-            props.setStarted(false);
-            props.setPlaying(false);
-            props.setPoints([[], []]);
-        }, 1); // Reset after 1 second
-
-        // Show popup for 1 second
-        if(props.attemptsTaken != 0){
-            setTimeout(() => {
-                setShowPopup(true);
-            }, 500);
-            setTimeout(() => {
-                setShowPopup(false);
-                props.setCorrect(0);
-                props.setAttemptsTaken(0);
-                props.setTotalAttempts(0);
-            }, 1500);
-        }
+            setShowPopup(true);
+        }, 500);
+        setTimeout(() => {
+            setShowPopup(false);
+            props.setCorrect(0);
+            props.setAttemptsTaken(0);
+            props.setTotalAttempts(0);
+        }, 1500);
     }
+    }
+   // once a multiple choice is clicked it is handled here by incrementing the amount of attempts u have taken
     useEffect(() => {
         if (props.clicked){ 
             props.setAttemptsTaken((prevAttempts) => prevAttempts + 1);   
@@ -48,24 +50,24 @@ function ModeHandler(props:{ level: string, setPoints: (value: React.SetStateAct
         }   
     },[props.clicked])
 
+    // when you attempt something this runs
     useEffect(()=>{ 
+        // if you have no more attempts it restarts
         if (props.attemptsTaken >= props.totalAttempts) {
-            
             reset()
-         
         }
+        // if you have more attempts you can generate another problem
         else{
             setTimeout(()=>{props.setGenerate(true)},500)
-            
         }
     },[ props.attemptsTaken])
 
     return(
-        <div>
-            <div>  
+        <div className="">
+            <div className="">  
                 {showPopup && (
-                    <div className="w-full h-full fixed top-0 left-0 flex items-center bg-black bg-opacity-50 z-10">
-                        <div className={` ml-[20vw] bg-white p-10 rounded shadow-lg text-2xl`} >
+                    <div className="w-[100vw] h-[100vh] fixed top-0 left-0 flex items-center max-xl:justify-center bg-black bg-opacity-50 z-50">
+                        <div className={`max-xl:ml-0 ml-[20vw] bg-white p-10 rounded shadow-lg text-2xl z-50`} >
                             your score is: {props.correct}/{props.attemptsTaken}
                         </div>
                     </div>)}

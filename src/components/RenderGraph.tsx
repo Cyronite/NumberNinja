@@ -41,8 +41,8 @@ function RenderGraph(props: { points: number[][] }) {
     }, [props.points]);
 
     return (
-        <div className=''>
-            <div id="graph" className="w-[55vw] h-[100vh]  rounded-lg"></div>
+        <div className='max-xl:w-full'>
+            <div id="graph" className="w-[55vw] h-[100vh] max-xl:w-full rounded-lg max-md:hidden"></div>
         </div>
     );
 }

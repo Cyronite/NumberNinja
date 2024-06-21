@@ -1,11 +1,13 @@
 import { useState, useEffect, Dispatch, SetStateAction } from "react";
 
 function Quiz (props: {setRatio:Dispatch<SetStateAction<number[]>> ,started:boolean, attemptsTaken:number, setAttemptsTaken:Dispatch<SetStateAction<number>>, totalAttempts:number, setTotalAttempts:Dispatch<SetStateAction<number>>, correct:number, setCorrect:Dispatch<SetStateAction<number>>, playing:boolean, setPlaying: Dispatch<SetStateAction<boolean>>,clicked:boolean, setClicked:Dispatch<SetStateAction<boolean>>, mode:string, generate:boolean, setGenerate:Dispatch<SetStateAction<boolean>>, setPoints:Dispatch<SetStateAction<number[][]>>}){
-    const [answerOptions, setAnswerOptions] = useState<number[][][]>([]);
-    const [correctIndex, setCorrectIndex] = useState(0);
-    const [selectedOption, setIsClicked] = useState(false);
-    const [showPopup, setShowPopup] = useState(false);
-    const [right, setRight] = useState(false);
+    //state variable
+    const [answerOptions, setAnswerOptions] = useState<number[][][]>([]);//array with the possible answers 
+    const [correctIndex, setCorrectIndex] = useState(0);// stores the right index which has the right answer
+    const [selectedOption, setIsClicked] = useState(false);// when a button is clicked this is used 
+    const [showPopup, setShowPopup] = useState(false);// used to show a popup
+    const [right, setRight] = useState(false); //used to know if the current selected value is correct
+    
     // calculates the greatest common divisor
     function gcd(a:number, b:number): number{
         let remainder = a % b;
@@ -151,24 +153,28 @@ function Quiz (props: {setRatio:Dispatch<SetStateAction<number[]>> ,started:bool
             }
             
             
-            
+            //sets the answer options
            setAnswerOptions(generateAnswers(ratio, pointOne, pointTwo))
-            
+            //sets the points for this line
             props.setPoints([pointOne, pointTwo])
-            
+            //precents generating forever
             props.setGenerate(false)
-
-
+            //reset to be used later
             setIsClicked(false)
             
         }     
     }, [props.generate])
 
+    //handles a click of a multiple choice button
     function handleClick(index:number){  
+        // sets up everything
         props.setClicked(true);
         setIsClicked(true)
         setShowPopup(true);
-        setTimeout(() => setShowPopup(false), 500); 
+        //shows popup
+        setTimeout(() => setShowPopup(false), 500);
+         
+        //if the right answer we save it 
         if(index == correctIndex){ 
             props.setCorrect(props.correct + 1)
             setRight(true)
@@ -180,8 +186,8 @@ function Quiz (props: {setRatio:Dispatch<SetStateAction<number[]>> ,started:bool
     return (
         <div className="flex justify-center">
             {showPopup && (
-            <div className="w-full h-full fixed top-0 left-0 flex items-center bg-black bg-opacity-50 z-10">
-                <div className={`${right ? "text-green-500" : "text-red-500"} ml-[20vw] bg-white p-10 rounded shadow-lg text-2xl`} >
+            <div className="w-[100vw] h-[100vh] fixed top-0 left-0 flex items-center max-xl:justify-center bg-black bg-opacity-50 z-30">
+                <div className={`${right ? "text-green-500" : "text-red-500"} max-xl:ml-0 ml-[20vw] bg-white p-10 rounded shadow-lg text-2xl`} >
                     { right ? "Correct!" : "Incorrect =("}
             </div>
         </div>
