@@ -22,8 +22,8 @@ function App (){
     <div className="">
       <img src={background} className="h-[100vh] w-[100vw] bg-black absolute -z-1"/>
       <div className="flex justify-between">
-        <div id="left Side" className="flex flex-col justify-between w-full py-[5vh] z-50">
-          <div id="top" className="flex w-full items-top justify-between px-16 gap-8 h-min  z-50">
+        <div id="left Side" className="flex flex-col justify-between w-[45vw] py-[5vh] z-50">
+          <div id="top" className="flex w-full items-top justify-between px-16 gap-8 h-min z-50">
             <div className=" flex gap-8 z-50">
               <Dropdown playing={playing} options={["Easy", "Medium", "Hard"]} option={level} setOption={setLevel  }/> 
               <Dropdown playing={playing} options={["1 Question", "5 Questions", "10 Questions", "15 Questions"]}  option={mode} setOption={setMode}/>    
