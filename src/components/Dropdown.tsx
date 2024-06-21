@@ -17,6 +17,7 @@ function Dropdown(props:{playing:boolean, options:string[], option:string, setOp
         setIsOpen(false);// Closes the dropdown after selection
     }
 
+    //returns the button and the dropdown menu 
     return (
         <div className="z-50">
             {!props.playing && <button onClick={handleClick} className="text-white font-bree text-2xl bg-[#2F72DC] w-[170px] py-2 px-4 rounded-md shadow-xl z-0">
@@ -25,7 +26,6 @@ function Dropdown(props:{playing:boolean, options:string[], option:string, setOp
             <div className = "">
                 {!props.playing && isOpen && ( <ul className="mt-2 rounded-sm bg-white drop-shadow-2xl absolute w-[150px] z-10 ">
                     {props.options.map((option) => (
-
                         <li key={option}
                             onClick={() => handleSelect(option)}
                             className="cursor-pointer px-4 py-2 hover:bg-gray-100"

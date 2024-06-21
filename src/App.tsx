@@ -7,17 +7,21 @@ import background from "./assets/background.svg"
 import Question from "./components/Question";
 import ModeHandler from "./components/ModeHandler";
 function App (){
-  const [ratio, setRatio] = useState<number[]>([])
-  const [playing, setPlaying ] = useState(false);
-  const [level, setLevel] = useState ("Set Level");
-  const [mode, setMode] = useState("Set Mode");
-  const [points, setPoints] = useState<number[][]>([[], []]);
-  const [generate, setGenerate] = useState(false);
-  const [clicked , setClicked] = useState(false);
-  const [correct, setCorrect] = useState(0);
-  const [attemptsTaken, setAttemptsTaken] = useState(0);
-  const [totalAttempts, setTotalAttempts] = useState (0);
-  const [started, setStarted] = useState(false);
+
+  //global usestate variables used by multiple scripts
+  const [ratio, setRatio] = useState<number[]>([]) // global variable that represents the current ratio 
+  const [playing, setPlaying ] = useState(false); // global varible that is true if we are currently playing
+  const [level, setLevel] = useState ("Set Level"); // global variable that represents the level of difficuly that the user is currently in
+  const [mode, setMode] = useState("Set Mode"); // global variable that represents the amount of questions that the user chose
+  const [points, setPoints] = useState<number[][]>([[], []]); //global variable that represents the current set of points
+  const [generate, setGenerate] = useState(false); // global used to generate more points when set to true
+  const [clicked , setClicked] = useState(false); // global variable that is set to true when a multiple choice is clicked on
+  const [correct, setCorrect] = useState(0); //  global varible that represents the amount of questions the user got correct
+  const [attemptsTaken, setAttemptsTaken] = useState(0); // global variable that represents the amount of attempts the user as taken
+  const [totalAttempts, setTotalAttempts] = useState (0); // global varible that represents the total amount of attemts the use chose
+  const [started, setStarted] = useState(false); // global varible that is set to true when the user starts a "quiz"
+  
+  //returns the components to be displayed to the screen with additional css to style it
   return (
     <div className="">
       <img src={background} className="h-[100vh] w-[100vw]  object-cover  overflow-hidden bg-black absolute -z-1"/>

@@ -3,7 +3,7 @@ import { useEffect } from 'react';
 import Plotly from 'plotly.js-dist';
 
 function RenderGraph(props: { points: number[][] }) {
-    
+    //when ever new points are generated or set this will graph it
     useEffect(() => {
         
         const Graph = document.getElementById('graph');
@@ -34,12 +34,13 @@ function RenderGraph(props: { points: number[][] }) {
                 mirror:true   
             },
         }, { scrollZoom: true, displayModeBar: false });
-
+        // destroy the graph after we are done with it 
         return () => {
             Plotly.purge(Graph);
         };
     }, [props.points]);
-
+    
+    //return the graph
     return (
         <div className='max-xl:w-full'>
             <div id="graph" className="w-[55vw] h-[100vh] max-xl:w-full rounded-lg max-md:hidden"></div>

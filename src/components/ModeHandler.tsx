@@ -61,7 +61,8 @@ function ModeHandler(props:{ level: string, setPoints: (value: React.SetStateAct
             setTimeout(()=>{props.setGenerate(true)},500)
         }
     },[ props.attemptsTaken])
-
+    
+    //returns the correct score the start button and is responsible for the score on the top right
     return(
         <div className="">
             <div className="">  

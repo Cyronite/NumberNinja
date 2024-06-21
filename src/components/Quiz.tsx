@@ -28,8 +28,8 @@ function Quiz (props: {setRatio:Dispatch<SetStateAction<number[]>> ,started:bool
     //generates a random point based on difficulty
     function generateRandomPoint(){
         if(props.mode == "Easy"){
-            //Generates a random whole number from -10 to 10
-            return [Math.floor(Math.random() * 21) - 10, Math.floor(Math.random() * 21) - 10];
+            //Generates a random whole number from -9 to 9
+            return [Math.floor(Math.random() * 19) - 9, Math.floor(Math.random() * 19) - 9];
         }
         else if (props.mode == "Medium"){
             //Generates a random number on a 0.5 from -10 to 10 
@@ -114,9 +114,9 @@ function Quiz (props: {setRatio:Dispatch<SetStateAction<number[]>> ,started:bool
 
         //come up with multiple choice answers
         let optionOne = [[xNumerator , xDenominator],[yNumerator , yDenominator]];
-        let optionTwo = [[yDenominator , xNumerator,],[xDenominator , yNumerator]];
+        let optionTwo = [[yNumerator ,xDenominator,],[xNumerator , yDenominator]];
         let optionThree = [[yNumerator , yDenominator],[xNumerator , xDenominator]];
-        let optionFour = [[xDenominator , yNumerator],[yDenominator , xNumerator]];
+        let optionFour = [[xNumerator  , yDenominator],[yNumerator , xDenominator]];
         // assighn options to an array 
         let ans = [optionOne, optionTwo, optionThree, optionFour];
         
@@ -126,8 +126,8 @@ function Quiz (props: {setRatio:Dispatch<SetStateAction<number[]>> ,started:bool
         //save correct answer (option one is always the right answer)
         for(let i = 0; i < ans.length; i++){
             if(ans[i] == optionOne){
-                    setCorrectIndex(i);
-                    console.log("correct Index is " + i)
+                setCorrectIndex(i);
+                console.log("correct Index is " + i)
             }
         }
         
@@ -180,9 +180,10 @@ function Quiz (props: {setRatio:Dispatch<SetStateAction<number[]>> ,started:bool
             setRight(true)
             setTimeout(() => {
                 setRight(false);
-              }, 1000);
+            }, 500);
         }
     }
+    //returns the multiple choice and  the popup 
     return (
         <div className="flex justify-center">
             {showPopup && (
@@ -203,8 +204,7 @@ function Quiz (props: {setRatio:Dispatch<SetStateAction<number[]>> ,started:bool
                     : (index === correctIndex 
                     ? "bg-green-400" 
                     : "bg-red-400")} 
-                    px-4 py-2 text-center rounded-md bg-[#2F72DC] font-bree text-white text-2xl`}
-            >   
+                    px-4 py-2 text-center rounded-md bg-[#2F72DC] font-bree text-white text-2xl`}>   
                 {`(${option[0][0]}${
                   option[0][1] !== 1 ? `/${option[0][1]}` : ""
                 }, ${option[1][0]}${option[1][1] !== 1 ? `/${option[1][1]}` : ""})`}
