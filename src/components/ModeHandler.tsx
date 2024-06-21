@@ -26,26 +26,10 @@ function ModeHandler(props:{ level: string, setPoints: (value: React.SetStateAct
             props.setStarted(false);
             props.setPlaying(false);
             props.setPoints([[], []]);
-        }, 1000); // Reset after 1 second
+        }, 500); // Reset after 1 second
 
         // Show popup for 1 second
-        if(props.attemptsTaken != 0){
-            setTimeout(() => {
-                setShowPopup(true);
-            }, 500);
-            setTimeout(() => {
-                setShowPopup(false);
-            }, 1500);
-        }
         
-
-
-       
-        setTimeout(() => {
-            props.setCorrect(0);
-            props.setAttemptsTaken(0);
-            props.setTotalAttempts(0);
-        }, 1500);
     }
     useEffect(() => {
         if (props.clicked){ 
@@ -58,6 +42,17 @@ function ModeHandler(props:{ level: string, setPoints: (value: React.SetStateAct
         if (props.attemptsTaken == props.totalAttempts) {
             
             reset()
+            if(props.attemptsTaken != 0){
+                setTimeout(() => {
+                    setShowPopup(true);
+                }, 500);
+                setTimeout(() => {
+                    setShowPopup(false);
+                    props.setCorrect(0);
+                    props.setAttemptsTaken(0);
+                    props.setTotalAttempts(0);
+                }, 1500);
+            }
         }
         else{
             setTimeout(()=>{props.setGenerate(true)},500)
