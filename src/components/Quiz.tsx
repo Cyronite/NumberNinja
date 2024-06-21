@@ -51,9 +51,6 @@ function simplifyFractionToString(numerator: number, denominator: number): strin
     if (simplifiedDenominator === 1) {
         return `${simplifiedNumerator}`;
     } else {
-        if(simplifiedDenominator == 0){
-            prompt("now")
-        }
         return `${simplifiedNumerator}/${simplifiedDenominator}`;
     }
 }
