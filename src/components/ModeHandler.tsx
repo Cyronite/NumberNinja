@@ -40,12 +40,12 @@ function ModeHandler(props:{ level: string, setPoints: (value: React.SetStateAct
         
 
 
-        // Reset attemptsTaken, totalAttempts, correct after 2 seconds
+       
         setTimeout(() => {
             props.setCorrect(0);
             props.setAttemptsTaken(0);
             props.setTotalAttempts(0);
-        }, 2000);
+        }, 1500);
     }
     useEffect(() => {
         if (props.clicked){ 
@@ -76,7 +76,7 @@ function ModeHandler(props:{ level: string, setPoints: (value: React.SetStateAct
                     </div>)}
             </div>
             { !props.started && <button onClick={handleClick} className="font-bree text-lg py-2 px-4 rounded-md bg-green-500 w-[170px] text-white">Start</button>}
-            { props.started && <div className="font-bree text-3xl">score : {props.correct}/{props.attemptsTaken}</div>}
+            { props.started && <div className="font-bree text-3xl text-white">score : {props.correct}/{props.attemptsTaken}</div>}
         </div>
     )
 }

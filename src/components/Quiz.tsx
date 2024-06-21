@@ -182,7 +182,7 @@ function Quiz (props: {setRatio:Dispatch<SetStateAction<number[]>> ,started:bool
             </div>
         </div>
           )}
-          <div className="w-[70vw] flex justify-evenly items-center h-[15vh] flex-wrap">
+          <div className="px-12 grid grid-cols-2 gap-3 pb-12 w-full h-48">
             {props.started &&
               answerOptions.map((option: number[][], index: number) => (
                 <button
@@ -193,7 +193,7 @@ function Quiz (props: {setRatio:Dispatch<SetStateAction<number[]>> ,started:bool
                     : (index === correctIndex 
                     ? "bg-green-400" 
                     : "bg-red-400")} 
-                    px-4 py-2 w-[30vw] text-center rounded-md bg-[#2F72DC] font-bree text-white`}
+                    px-4 py-2 text-center rounded-md bg-[#2F72DC] font-bree text-white`}
             >   
                 {`(${option[0][0]}${
                   option[0][1] !== 1 ? `/${option[0][1]}` : ""

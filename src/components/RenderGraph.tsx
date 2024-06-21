@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 // @ts-ignore
 import Plotly from 'plotly.js-dist';
 
-function RenderGraph(props: {points:number[][]}) {
+function RenderGraph(props: { points: number[][] }) {
     
     useEffect(() => {
         
@@ -12,25 +12,39 @@ function RenderGraph(props: {points:number[][]}) {
             x: [props.points[0][0], props.points[1][0]],
             y: [props.points[0][1], props.points[1][1]],   
             text: ['Point A', 'Point B'],
+            marker: { color: 'white' },
+            line: { color: 'white' }
         }], {
-            margin: {t: 0,r: 0},
+            margin: {t:50,r:50  },
             dragmode: 'pan',
-        },{scrollZoom: true, displayModeBar: false});
+            paper_bgcolor: 'black',
+            plot_bgcolor: 'black',
+            xaxis: {
+                gridcolor: '#808080',
+                tickfont: { color: 'white', size: 18 },
+                zerolinecolor: '#2F72DC',
+                linecolor: 'white',  
+                mirror:true        
+            },
+            yaxis: {
+                gridcolor: '#808080',
+                tickfont: { color: 'white', size: 18 },  
+                zerolinecolor: '#2F72DC',
+                linecolor: 'white',      
+                mirror:true   
+            },
+        }, { scrollZoom: true, displayModeBar: false });
+
         return () => {
             Plotly.purge(Graph);
         };
     }, [props.points]);
 
     return (
-        <>
-        <div className='flex justify-center items-center'>
-            <div id="graph" className="w-[70vw] h-[60vh] my-[5vh] overflow-hidden border-[#2F72DC] border-2 -z-1"></div>
+        <div className=''>
+            <div id="graph" className="w-[45vw] h-[100vh]  rounded-lg"></div>
         </div>
-           
-        </>
-        
     );
 }
 
 export default RenderGraph;
-
