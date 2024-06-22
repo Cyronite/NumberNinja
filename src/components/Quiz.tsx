@@ -22,11 +22,8 @@ function Quiz (props: {setRatio:Dispatch<SetStateAction<number[]>> ,started:bool
     // simplifys a fraction
     function simplifyFraction(numerator:number, denominator:number): [number,number] {
         const commonDivisor = gcd(numerator, denominator);
-        if(commonDivisor == 1){
-            return [numerator, denominator];
-        } else{
-            return [(numerator/ commonDivisor), (denominator / commonDivisor)];
-        }   
+        return [(numerator/ commonDivisor), (denominator / commonDivisor)];
+         
     }
 
     //generates a random point based on difficulty
@@ -121,9 +118,28 @@ function Quiz (props: {setRatio:Dispatch<SetStateAction<number[]>> ,started:bool
         let optionTwo = [[yDenominator ,xNumerator,],[xDenominator , yNumerator]];
         let optionThree = [[yNumerator , yDenominator],[xNumerator , xDenominator]];
         let optionFour = [[xDenominator  , yNumerator],[yDenominator , xNumerator]];
+
+       
         // assighn options to an array 
         let ans = [optionOne, optionTwo, optionThree, optionFour];
         
+        
+        for(let i = 0; i < ans.length; i++){
+            //if the demoninators are 0 then just make then one edge scenerio
+            if(ans[i][0][1] == 0){
+                ans[i][0][1] = 1
+            }
+            if(ans[i][1][1] == 0){
+                ans[i][1][1] = 1
+            }
+            if(ans[i][1][0] < 0 && ans[i][1][1] < 0){
+                ans[i][1] = [ans[i][1][0]*-1, ans[i][1][1]*-1]
+            }
+            
+            ans[i][0] = simplifyFraction(ans[i][0][0], ans[i][0][1])
+            ans[i][1] = simplifyFraction(ans[i][1][0], ans[i][1][1])   
+        }
+
         //shuffle answers
         ans = shuffle(ans);
 
